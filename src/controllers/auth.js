@@ -36,7 +36,9 @@ exports.login = function(req, res) {
 }
 
 exports.verifyToken = function(req, res, next) {
-  const token = req.body.token || req.query.token || req.headers['x-access-token'];
+  console.log(req.headers);
+  const token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['authorization'];
+  console.log(token);
 
   if (token) {
     jwt.verify(token, privateKey, function(err, decoded) {

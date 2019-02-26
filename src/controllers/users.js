@@ -5,6 +5,10 @@ import pagination from '../helpers/pagination';
 
 const User = mongoose.model('User');
 
+exports.returnCurrentUser = (req, res) => {
+  res.send(req.currentUser);
+}
+
 exports.list = function(req, res) {
   if (req.currentUser.role != 'admin') return response.sendForbidden(res);
   User.paginate(request.getFilteringOptions(req, ['email', 'role']), request.getRequestOptions(req), function(err, result) {

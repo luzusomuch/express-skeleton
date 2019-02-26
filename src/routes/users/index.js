@@ -6,6 +6,10 @@ import items from './items';
 
 const routes  = express.Router();
 
+routes.get('/', auth.verifyToken, users.list);
+routes.get('/me', auth.verifyToken, users.returnCurrentUser);
+routes.get('/:id', auth.verifyToken, users.read);
+
 routes.use('/:userId/items', users.loadUser, items);
 
 routes.route('/:id')
