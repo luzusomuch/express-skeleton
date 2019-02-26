@@ -21,7 +21,18 @@ const UserSchema = new Schema({
   items : [{
     type: Schema.Types.ObjectId,
     ref: 'Item'
-  }]
+  }],
+  deleted: {
+    type: Boolean,
+    default: false
+  },
+  deletedBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  deletedAt: {
+    type: Date
+  }
 });
 
 UserSchema.set('toJSON', {
