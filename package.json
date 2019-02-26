@@ -1,5 +1,5 @@
 {
-  "name": "node-express-skeleton",
+  "name": "express-skeleton",
   "version": "1.0.0",
   "description": "Node.js + Express skeleton application",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/romandunets/node-express-skeleton"
+    "url": "git+https://github.com/luzusomuch/express-skeleton.git"
   },
   "keywords": [
     "REST",
@@ -18,12 +18,12 @@
     "Node.js",
     "wordlist"
   ],
-  "author": "Roman Dunets",
-  "license": "ISC",
+  "author": "Vinh Nguyen",
+  "license": "MIC",
   "bugs": {
-    "url": "https://github.com/romandunets/node-express-skeleton"
+    "url": "https://github.com/luzusomuch/express-skeleton.git"
   },
-  "homepage": "https://github.com/romandunets/node-express-skeleton#readme",
+  "homepage": "https://github.com/luzusomuch/express-skeleton.git#readme",
   "dependencies": {
     "bcrypt": "^3.0.4",
     "body-parser": "^1.17.2",
