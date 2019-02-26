@@ -32,12 +32,13 @@ UserSchema.set('toJSON', {
 });
 
 UserSchema.pre('save', function(next) {
+  let $this = this;
   if (!this.isModified('password')) return next();
 
   bcrypt.hash(this.password, 10, function(err, hash) {
     if (err) return next(err);
-
-    this.password = hash;
+    console.log(hash);
+    $this.password = hash;
     next();
   });
 });

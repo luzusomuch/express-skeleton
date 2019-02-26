@@ -34,7 +34,7 @@ In order to work with database, you should ave installed mongodb. Instructions o
 Clone the `node-express-skeleton` repository using git:
 
 ```
-git clone https://github.com/romandunets/node-express-skeleton
+git clone https://github.com/luzusomuch/express-skeleton.git
 ```
 
 Next, you need to install packages and run the application. There are two options to do that.

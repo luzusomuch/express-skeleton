@@ -8,7 +8,7 @@ const User = mongoose.model('User');
 const privateKey = config.key.privateKey;
 const tokenExpireInMinutes = config.key.tokenExpireInMinutes;
 
-exports.authenticate = function(req, res) {
+exports.login = function(req, res) {
   User.findOne({ email: req.body.email })
   .exec(function(err, user) {
     if (err) throw err;

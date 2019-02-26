@@ -8,7 +8,7 @@ const routes  = express.Router();
 
 routes.use(response.setHeadersForCORS);
 
-routes.use('/', auth);
+routes.use('/authenticate', auth);
 routes.use('/users', users);
 
 routes.get('/', (req, res) => {
