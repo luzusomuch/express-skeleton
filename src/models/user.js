@@ -32,6 +32,14 @@ const UserSchema = new Schema({
   },
   deletedAt: {
     type: Date
+  },
+  createdAt: {
+    type: Date,
+    default: new Date()
+  },
+  updatedAt: {
+    type: Date,
+    default: new Date()
   }
 });
 
@@ -48,7 +56,6 @@ UserSchema.pre('save', function(next) {
 
   bcrypt.hash(this.password, 10, function(err, hash) {
     if (err) return next(err);
-    console.log(hash);
     $this.password = hash;
     next();
   });

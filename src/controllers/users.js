@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import response from '../helpers/response';
 import request from '../helpers/request';
 import pagination from '../helpers/pagination';
+import mailer from '../helpers/mailer';
 
 const User = mongoose.model('User');
 
@@ -32,6 +33,9 @@ exports.list = function(req, res) {
 };
 
 exports.read = function(req, res) {
+  if (req.user.deleted) {
+    return res.sendNotFound(res);
+  }
   return res.json(req.user);
 };
 
@@ -40,6 +44,7 @@ exports.create = function(req, res) {
   newUser.role = 'user';
   newUser.save(function(err, user) {
     if (err) return response.sendBadRequest(res, err);
+    mailer.sendMail({to: newUser.email});
     response.sendCreated(res, user);
   });
 };
