@@ -40,6 +40,10 @@ const UserSchema = new Schema({
   updatedAt: {
     type: Date,
     default: new Date()
+  },
+  verified: {
+    type: Boolean,
+    default: false
   }
 });
 

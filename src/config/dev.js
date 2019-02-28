@@ -12,7 +12,7 @@ module.exports = {
   },
   key: {
     privateKey: '37LvDSm4XvjYOh9Y',
-    tokenExpireInMinutes: 1440
+    tokenExpireInMinutes: 2880
   },
   pagination: {
     defaultPage: 1,
@@ -26,6 +26,11 @@ module.exports = {
   },
   fromMail: 'luzusomuch@gmail.com',
   sendgrid: {
-    apiKey: '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'
-  }
+    apiKey: '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',
+    senderName: 'Vinh Nguyen',
+    emailTemplates: {
+      signUp: 'd-725d9f44be304715a828b028546eec7c'
+    }
+  },
+  frontendURL: 'localhost:3000'
 };

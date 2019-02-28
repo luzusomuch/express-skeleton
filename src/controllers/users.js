@@ -3,8 +3,11 @@ import response from '../helpers/response';
 import request from '../helpers/request';
 import pagination from '../helpers/pagination';
 import mailer from '../helpers/mailer';
+import config from 'config';
+import crypto from 'crypto';
 
 const User = mongoose.model('User');
+const Token = mongoose.model('Token');
 
 exports.getUserById = (req, res, next) => {
   User.findById(req.params.id, (err, user) => {
@@ -44,8 +47,27 @@ exports.create = function(req, res) {
   newUser.role = 'user';
   newUser.save(function(err, user) {
     if (err) return response.sendBadRequest(res, err);
-    mailer.sendMail({to: newUser.email});
-    response.sendCreated(res, user);
+
+    const token = new Token({
+      userId: user._id,
+      token: crypto.randomBytes(16).toString('hex')
+    });
+    token.save(err => {
+      if (err) {
+        return res.send(err);
+      }
+      mailer.sendMail({
+        to: newUser.email, 
+        subject: 'Register successfully',
+        html: 'sign-up.html',
+        data: {
+          senderName: config.sendgrid.senderName,
+          email: newUser.email,
+          verifyUrl: `${config.frontendURL}/authenticate/verify-account/${token.token}`
+        }
+      });
+      response.sendCreated(res, user);
+    });
   });
 };
 

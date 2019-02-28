@@ -4,6 +4,7 @@ import config from 'config';
 import response from '../helpers/response';
 
 const User = mongoose.model('User');
+const Token = mongoose.model('Token');
 
 const privateKey = config.key.privateKey;
 const tokenExpireInMinutes = config.key.tokenExpireInMinutes;
@@ -18,6 +19,12 @@ exports.login = function(req, res) {
     } else if (user) {
       if (user.deleted) {
         return response.sendNotFound(res);
+      }
+      if (!user.verified) {
+        return res.status(500).send({
+          message:'Please verify your account first',
+          success: false
+        });
       }
       user.verifyPassword(req.body.password, function(err, isMatch) {
         if (isMatch) {
@@ -64,4 +71,31 @@ exports.isAdmin = (req, res, next) => {
   } else {
     response.sendForbidden(res);
   }
+};
+
+exports.verifyAccount = (req, res) => {
+  if (!req.params.token) {
+    return response.sendBadRequest(res, 'Missing token');
+  }
+  Token.findOne({token: req.params.token}, (err, token) => {
+    if (err) {
+      return res.send(err);
+    }
+    if (!token) {
+      return response.sendNotFound(res, 'Token not found');
+    }
+    User.findById(token.userId, (err, user) => {
+      if (err) {
+        return res.send(err);
+      }
+      if (!user) {
+        return response.sendNotFound(res, 'User not found');
+      }
+      user.set({verified: true}).save().then(() => {
+        return res.status(200).send({success: true, message: 'Verified account successfully'});
+      }).catch(err => {
+        return res.send(err);
+      })
+    });
+  });
 }

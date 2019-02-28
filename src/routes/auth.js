@@ -12,4 +12,6 @@ routes.post('/login',
 routes.post('/register', 
   users.create);
 
+routes.get('/verify-account/:token', auth.verifyAccount);
+
 module.exports = routes;

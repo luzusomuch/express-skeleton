@@ -23,10 +23,10 @@ exports.sendForbidden = function(res) {
   });
 };
 
-exports.sendNotFound = function(res) {
+exports.sendNotFound = function(res, message) {
   return res.status(404).send({
     success: false,
-    message: 'Resource not found.'
+    message: message || 'Resource not found.'
   });
 };
 
