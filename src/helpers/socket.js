@@ -12,17 +12,22 @@ exports.configSocket = function(io) {
       console.log('user joined room ', id);
     });
 
-    queue.create('emitSocket', {
-      channel: 'new-chat-msg',
-      room: 'abc',
-      content: 'zxc'
-    }).save();
+    // to execute the queue use as below
+    
+    // queue.create('emitSocket', {
+    //   channel: 'new-chat-msg',
+    //   room: 'abc',
+    //   content: 'zxc'
+    // }).save();
 
-    queue.process('emitSocket', (job) => {
+    queue.process('emitSocket', (job, done) => {
       const channel = job.data.channel;
       delete job.data.channel;
-      const data = job.data.channel;
-      socket.emit(channel, job.data);
+      const data = job.data;
+      console.log(`queue process ${channel}`);
+      console.log(data);
+      socket.emit(channel, data);
+      done();
     });
   });
 }
