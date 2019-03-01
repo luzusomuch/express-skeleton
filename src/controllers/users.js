@@ -3,6 +3,7 @@ import response from '../helpers/response';
 import request from '../helpers/request';
 import pagination from '../helpers/pagination';
 import mailer from '../helpers/mailer';
+import joi from '../helpers/joi';
 import config from 'config';
 import crypto from 'crypto';
 
@@ -43,30 +44,35 @@ exports.read = function(req, res) {
 };
 
 exports.create = function(req, res) {
-  const newUser = new User(req.body);
-  newUser.role = 'user';
-  newUser.save(function(err, user) {
-    if (err) return response.sendBadRequest(res, err);
+  joi.validateCreateUserSchema(req.body, function(err) {
+    if (err) {
+      return response.sendBadRequest(res, err);
+    }
+    const newUser = new User(req.body);
+    newUser.role = 'user';
+    newUser.save(function(err, user) {
+      if (err) return response.sendBadRequest(res, err);
 
-    const token = new Token({
-      userId: user._id,
-      token: crypto.randomBytes(16).toString('hex')
-    });
-    token.save(err => {
-      if (err) {
-        return res.send(err);
-      }
-      mailer.sendMail({
-        to: newUser.email, 
-        subject: 'Register successfully',
-        html: 'sign-up.html',
-        data: {
-          senderName: config.sendgrid.senderName,
-          email: newUser.email,
-          verifyUrl: `${config.frontendURL}/authenticate/verify-account/${token.token}`
-        }
+      const token = new Token({
+        userId: user._id,
+        token: crypto.randomBytes(16).toString('hex')
       });
-      response.sendCreated(res, user);
+      token.save(err => {
+        if (err) {
+          return res.send(err);
+        }
+        mailer.sendMail({
+          to: newUser.email, 
+          subject: 'Register successfully',
+          html: 'sign-up.html',
+          data: {
+            senderName: config.sendgrid.senderName,
+            email: newUser.email,
+            verifyUrl: `${config.frontendURL}/authenticate/verify-account/${token.token}`
+          }
+        });
+        response.sendCreated(res, user);
+      });
     });
   });
 };
